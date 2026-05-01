@@ -77,7 +77,7 @@ struct Shpenzim{
     int id_shpenzim;
     int id_user;
     char pershkrim[50];
-    int id_kategori;
+    struct Kategoria kategori;
     float shuma;
     char data[20];
 };
