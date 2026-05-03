@@ -109,7 +109,7 @@ int eshtUsernameUnik(const char username[])
     }
     while (fscanf(fptr, "%d %s %s %s %f", &id_user, emri, Fileusername, password, &buxheti_mujor) != EOF)
     {
-        if (strcmp(username, Fileusername) == 0)
+        if (strcasecmp(username,Fileusername) == 0)
         {
             fclose(fptr);
             return 0; // un jo unik
@@ -469,7 +469,7 @@ int login(int *id_user, char username[])
     while (fscanf(fptr, "%d %s %s %s %f",
                   &fileId, emri, fileUsername, filePassword, &buxheti) != EOF)
     {
-        if (strcmp(inputUsername, fileUsername) == 0)
+        if (strcasecmp(inputUsername, fileUsername) == 0)
         {
             if (strcmp(password, filePassword) == 0)
             {
@@ -489,6 +489,12 @@ int login(int *id_user, char username[])
 
     fclose(fptr);
     printf("User-i nuk ekziston!\n");
+    char choice;
+    printf("Doni te krijoni nje user te ri? (p/j):");
+    scanf(" %c",&choice);
+    if(choice=='p'||choice=='P'){
+        regjistroPerdorues();
+    }
     return LOGIN_FAIL;
 }
 
