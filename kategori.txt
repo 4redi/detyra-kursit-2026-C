@@ -1,0 +1,5 @@
+1 Transport Shpenzime_transporti
+2 Ushqim Ushqim_dhe_pije
+3 Shendetesi Mjekesi_dhe_ilace
+4 Argetim Kinema_restorante_etj
+5 Tjeter Shpenzime_te_tjera
