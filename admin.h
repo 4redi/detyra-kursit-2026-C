@@ -13,5 +13,6 @@ void updatePerdorues(int id_user);
 void kerkoSipasUsername(char username[]);
 void rradhitSipasUsername();
 void adminMenuKategori(); // crud per kategorine
-void statistika();        // si tip menuje ku mund te shohesh nr users, total shpenzimesh, mesatare shpenzimesh, kategoria max, etc
+void statistika();  // si tip menuje ku mund te shohesh nr users, total shpenzimesh, mesatare shpenzimesh, kategoria max, etc
+void shfaqTeTerePerdoruesit();      
 #endif
