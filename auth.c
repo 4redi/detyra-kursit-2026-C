@@ -18,7 +18,7 @@ int login(int *id_user, char username[])
     printf("Password: ");
     scanf("%49s", password);
 
-    if (strcmp(inputUsername, "admin") == 0 && strcmp(password, "Admin123") == 0)
+    if (strcmp(inputUsername, "admin") == 0 && strcmp(password, "Admin123@") == 0)
     {
         strcpy(username, "admin");
         return LOGIN_ADMIN;
@@ -99,8 +99,11 @@ void regjistroPerdorues()
         {
             printf("Username ekziston! Provo tjeter.\n");
         }
+        else if(strlen(p.username)<5){
+            printf("Username duhet 5 karaktere e mbi!\n");
+        }
 
-    } while (!eshtUsernameUnik(p.username));
+    } while (!eshtUsernameUnik(p.username)||strlen(p.username)<5);
 
     // Password
     do
