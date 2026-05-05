@@ -21,6 +21,7 @@ void renditShpenzimeSipasDates(int id_user);
 void kerkoShpenzimSipasId(int id_shpenzim);
 void kerkoShpenzimSipasDate(int id_user, char data[]);
 void kerkoShpenzimeIntervalDate(int id_user, char data1[], char data2[]);
+int gjeneroIdShpenzim();
 
 // ######## Fundi perdorues funksionet ##########
 
