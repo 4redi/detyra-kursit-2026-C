@@ -4,6 +4,7 @@
 #include <ctype.h>
 #include "user.h"
 #include "menu.h"
+#include "structs.h"
 
 
 
@@ -136,17 +137,126 @@ void userMenu(int id_user, char username[])
 
 
 
+void shtoShpenzim(int id_user)
+{
+    char username[20];
+    struct Perdorues p;
 
+    FILE *fu = fopen("user.txt", "r");
+    if (fu == NULL)
+    {
+        printf("Gabim ne hapjen e user.txt!\n");
+        return;
+    }
 
+    //gjen username
+    int found = 0;
+    while (fscanf(fu, "%d %s %s %s %f",
+                  &p.id_user,
+                  p.emri,
+                  p.username,
+                  p.password,
+                  &p.buxheti_mujor) ==5) 
+    {
+        if (p.id_user == id_user)
+        {
+            strcpy(username, p.username);
+            found = 1;
+            break;
+        }
+    }
 
+    fclose(fu);
 
+    if (!found)
+    {
+        printf("Useri nuk u gjet!\n");
+        return;
+    }
 
+    FILE *f = fopen("shpenzime.txt", "a");
+    if (f == NULL)
+    {
+        printf("Gabim ne hapjen e shpenzime.txt!\n");
+        return;
+    }
 
+    struct Shpenzim s;
+    struct Kategoria k;
+    int zgjedhje;
 
-void shtoShpenzim(int id_user) {
-    printf("shtoShpenzim not implemented yet\n\n");
+    s.id_shpenzim = gjeneroIdShpenzim();
+    s.id_user = id_user;
+
+    printf("Pershkrimi: ");
+    scanf(" %[^\n]", s.pershkrim);
+
+    FILE *fk = fopen("kategori.txt", "r");
+    if (fk == NULL)
+    {
+        printf("Gabim ne hapjen e kategori.txt!\n");
+        fclose(f);
+        return;
+    }
+
+    printf("\nKategorite:\n");
+    while (fscanf(fk, "%d %s %s",
+                  &k.id_kategoria,
+                  k.emertimi,
+                  k.pershkrimi) ==3) 
+    {
+        printf("%d - %s\n", k.id_kategoria, k.emertimi);
+    }
+
+    printf("Zgjidh ID e kategorise: ");
+    scanf("%d", &zgjedhje);
+
+    rewind(fk);
+
+    int cat_found = 0;
+    while (fscanf(fk, "%d %s %s",
+                  &k.id_kategoria,
+                  k.emertimi,
+                  k.pershkrimi) ==3)
+    {
+        if (k.id_kategoria == zgjedhje)
+        {
+            s.kategori = k;
+            cat_found = 1;
+            break;
+        }
+    }
+
+    fclose(fk);
+
+    if (!cat_found)
+    {
+        printf("Kategoria nuk u gjet!\n");
+        fclose(f);
+        return;
+    }
+
+    printf("Shuma: ");
+    scanf("%f", &s.shuma);
+
+    printf("Data: ");
+    scanf("%s", s.data);
+
+    fprintf(f, "%d %d %s %s %d %s %s %.2f %s\n",
+            s.id_shpenzim,
+            s.id_user,
+            s.pershkrim,
+            username,
+            s.kategori.id_kategoria,
+            s.kategori.emertimi,
+            s.kategori.pershkrimi,
+            s.shuma,
+            s.data);
+
+    fclose(f);
+
+    printf("Shpenzimi u shtua me sukses!\n\n");
 }
-
 void shtoTeArdhura(int id_user) {
     printf("shtoTeArdhura not implemented yet\n\n");
 }
@@ -197,4 +307,33 @@ void kerkoShpenzimSipasDate(int id_user, char data[]) {
 
 void kerkoShpenzimeIntervalDate(int id_user, char data1[], char data2[]) {
     printf("kerkoShpenzimeIntervalDate not implemented yet\n\n");
+}
+
+int gjeneroIdShpenzim()
+{
+    FILE *f = fopen("shpenzime.txt", "r");
+    if (f == NULL)
+        return 1;
+
+    int last_id = 0;
+    struct Shpenzim s;
+    char username[20];
+
+    while (fscanf(f, "%d %d %s %s %d %s %s %f %s",
+                  &s.id_shpenzim,
+                  &s.id_user,
+                  username,
+                  s.pershkrim,
+                  &s.kategori.id_kategoria,
+                  s.kategori.emertimi,
+                  s.kategori.pershkrimi,
+                  &s.shuma,
+                  s.data) ==9) 
+    {
+        if (s.id_shpenzim > last_id)
+            last_id = s.id_shpenzim;
+    }
+
+    fclose(f);
+    return last_id + 1;
 }
