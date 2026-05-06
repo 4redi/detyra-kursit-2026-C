@@ -6,12 +6,6 @@
 #include "menu.h"
 #include "structs.h"
 
-
-
-
-
-
-
 void userMenu(int id_user, char username[])
 {
     printf("\n\n");
@@ -262,7 +256,43 @@ void shtoTeArdhura(int id_user) {
 }
 
 void shfaqShpenzime(int id_user) {
-    printf("shfaqShpenzime not implemented yet\n\n");
+    FILE *fptr=fopen("shpenzime.txt","r");
+    struct Shpenzim s;
+
+    if(fptr==NULL){
+        printf("Dicka shkoi keq!");
+    }
+   char username[20];
+    printf("\n%-12s %-10s %-20s %-15s %-15s %-20s %-20s %-10s %-12s\n",
+       "ID_Shpenzim", "ID_User", "Pershkrim", "Username",
+       "ID_Kat", "Kategoria", "Kat_Pershkrim",
+       "Shuma", "Data");
+
+printf("-------------------------------------------------------------------------------------------------------------------------------\n");
+
+while (fscanf(fptr, "%d %d %s %s %d %s %s %f %s",
+                  &s.id_shpenzim,
+                  &s.id_user,
+                  s.pershkrim,
+                  username,
+                  &s.kategori.id_kategoria,
+                  s.kategori.emertimi,
+                  s.kategori.pershkrimi,
+                  &s.shuma,
+                  s.data) !=EOF){
+                    if(s.id_user==id_user){
+                        printf("%-12d %-10d %-20s %-15s %-10d %-15s %-20s %-10.2f %-12s\n",
+                   s.id_shpenzim,
+                   s.id_user,
+                   s.pershkrim,
+                   username,
+                   s.kategori.id_kategoria,
+                   s.kategori.emertimi,
+                   s.kategori.pershkrimi,
+                   s.shuma,
+                   s.data);
+                    }
+                  }
 }
 
 void shfaqTeArdhura(int id_user) {
