@@ -73,17 +73,7 @@ void regjistroPerdorues()
     struct Perdorues p;
 
     // ID
-    do
-    {
-        printf("Vendos ID: ");
-        scanf("%d", &p.id_user);
-
-        if (!eshtIdValid(p.id_user))
-        {
-            printf("Kjo ID ekziston ose eshte me e vogel se 1! Provo perseri.\n");
-        }
-
-    } while (!eshtIdValid(p.id_user));
+    p.id_user=gjeneroIdUser();
 
     // Emri
     printf("Emri: ");
