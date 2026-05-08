@@ -17,6 +17,14 @@ struct Kategoria
     char pershkrimi[100];
 };
 
+struct Te_Ardhura{
+    int id_burimi;
+    int id_user;
+    char burimi[50];
+    float shuma;
+    char data[20];
+};
+
 struct Shpenzim
 {
     int id_shpenzim;
