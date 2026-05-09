@@ -95,13 +95,13 @@ void shfaqPerdoruesit(){
            "ID", "Emri", "Username", "Password", "Buxheti");
     printf("---------------------------------------------------------------------\n");
 
-    while(fscanf(fptr,"%d %s %s %s %f",&p.id_user,p.emri,p.username,p.password,&p.buxheti_mujor)!=EOF){
+    while(fscanf(fptr,"%d %s %s %s %f",&p.id_user,p.emri,p.username,p.password,&p.buxheti_vjetor)!=EOF){
         printf("%-5d %-15s %-15s %-15s %-10.2f\n",
                p.id_user,
                p.emri,
                p.username,
                p.password,
-               p.buxheti_mujor);
+               p.buxheti_vjetor);
     }
     fclose(fptr);
 }
