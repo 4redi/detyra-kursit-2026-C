@@ -33,7 +33,7 @@ int login(int *id_user, char username[])
     struct Perdorues p;
 
     while (fscanf(fptr, "%d %s %s %s %f",
-                  &p.id_user, p.emri, p.username, p.password, &p.buxheti_mujor) != EOF)
+                  &p.id_user, p.emri, p.username, p.password, &p.buxheti_vjetor) != EOF)
     {
         if (strcasecmp(inputUsername, p.username) == 0 &&
             strcmp(password, p.password) == 0)
@@ -112,8 +112,8 @@ void regjistroPerdorues()
     } while (!eshtPasswordValid(p.password));
 
     // Buxheti
-    printf("Buxheti mujor: ");
-    scanf("%f", &p.buxheti_mujor);
+    printf("Buxheti vjetor: ");
+    scanf("%f", &p.buxheti_vjetor);
 
     // Ruajtja ne file
     fprintf(fptr, "%d %s %s %s %.2f\n",
@@ -121,7 +121,7 @@ void regjistroPerdorues()
             p.emri,
             p.username,
             p.password,
-            p.buxheti_mujor);
+            p.buxheti_vjetor);
 
     fclose(fptr);
 
