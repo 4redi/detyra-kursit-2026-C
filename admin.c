@@ -5,6 +5,10 @@
 #include "admin.h"
 #include "menu.h"
 #include "structs.h"
+#include "auth.h"
+#include "utils.h"
+#include<errno.h>
+
 
 
 void adminMenu()
@@ -28,6 +32,7 @@ void adminMenu()
        printf("11.Dilni nga menuja e Administratorit\n");
        printf("Vendosni zgjedhjen tuaj:");
        scanf("%d",&choice);
+       printf("\n");
 
        switch(choice){
         case 1:
@@ -37,10 +42,10 @@ void adminMenu()
         shfaqPerdoruesit();
         break;
         case 3:
-        
         printf("Vendosni id qe doni te kerkoni:");
         scanf("%d",&id_user);
         kerkoSipasId(id_user);
+        printf("\n\n");
         break;
         case 4:
         printf("Vendosni id qe doni te fshihni:");
@@ -72,7 +77,6 @@ void adminMenu()
         case 11:
         menuja();
         break;
-
         default:
         printf("Zgjedhje e pavlefshme!");
        }
@@ -82,7 +86,8 @@ void adminMenu()
 
 
 void shtoPerdorues(){
-    printf("Akoma");
+    regjistroPerdorues();
+    printf("\n\n");
 }
 void shfaqPerdoruesit(){
     FILE *fptr=fopen("user.txt","r");
@@ -107,14 +112,112 @@ void shfaqPerdoruesit(){
 }
 
 void shfaqTeTerePerdoruesit(){
-    printf("Akoma"); //kjo shfaq cdo gje?!
+    FILE *fu = fopen("user.txt", "r");
+    if (fu == NULL) {
+        printf("Asnje perdorues!\n");
+        return;
+    }
+    struct Perdorues p;
+    printf("\n%-5s %-15s %-15s %-15s %-12s %-12s %-12s\n",
+           "ID", "Emri", "Username", "Password", "Buxheti", "Te Ardhura", "Shpenzime");
+    printf("----------------------------------------------------------------------------------------\n");
+
+    while (fscanf(fu, "%d %s %s %s %f",
+                  &p.id_user, p.emri, p.username, p.password, &p.buxheti_vjetor) == 5) {
+        float ardhura = totalTeArdhura(p.id_user);
+        float shpenzime = totalShpenzime(p.id_user);
+        printf("%-5d %-15s %-15s %-15s %-12.2f %-12.2f %-12.2f\n",
+               p.id_user, p.emri, p.username, p.password,
+               p.buxheti_vjetor, ardhura, shpenzime);
+    }
+    fclose(fu);
 }
+
+
 void kerkoSipasId(int id_user){
-    printf("Akoma");
+    FILE *fptr=fopen("user.txt","r");
+    if(fptr==NULL){
+        printf("Dicka shkoi keq!");
+        return;
+    }
+    struct Perdorues p;
+    int found=0;
+
+    while (fscanf(fptr, "%d %s %s %s %f",
+                  &p.id_user, p.emri, p.username, p.password, &p.buxheti_vjetor) == 5) {
+        if (p.id_user == id_user) {
+            printf("\nID       : %d\n", p.id_user);
+            printf("Emri     : %s\n", p.emri);
+            printf("Username : %s\n", p.username);
+            printf("Password : %s\n", p.password);
+            printf("Buxheti  : %.2f\n", p.buxheti_vjetor);
+            found = 1;
+            break;
+        }
+    }
+
+    fclose(fptr);
+    if(!found){
+        printf("Perdoruesi me %d ID nuk ekziston!",id_user);
+    }
+    printf("\n\n");
 }
 void fshiPerdorues(int id_user){
-    printf("Akoma");
+
+    FILE *fptr = fopen("user.txt", "r");
+    FILE *temp = fopen("users_temp.txt", "w");
+
+    if(fptr == NULL || temp == NULL){
+        printf("Dicka shkoi keq!\n");
+        return;
+    }
+
+    struct Perdorues p;
+    int found = 0;
+
+    while(fscanf(fptr, "%d %s %s %s %f",
+                 &p.id_user,
+                 p.emri,
+                 p.username,
+                 p.password,
+                 &p.buxheti_vjetor) == 5){
+
+        if(p.id_user == id_user){
+            found = 1;
+            continue;
+        }
+
+        fprintf(temp, "%d %s %s %s %.2f\n",
+                p.id_user,
+                p.emri,
+                p.username,
+                p.password,
+                p.buxheti_vjetor);
+    }
+
+    fclose(fptr);
+    fclose(temp);
+
+    fcloseall(); //kam lene file hapur diku
+
+    if(!found){
+        remove("users_temp.txt");
+        printf("Perdoruesi nuk u gjet!\n");
+        return;
+    }
+
+    remove("user.txt");
+
+    if(rename("users_temp.txt", "user.txt") != 0){
+        char buf[256];
+        strerror_s(buf,256,errno);
+        printf("Error:%s",buf);
+        return;
+    }
+
+    printf("Perdoruesi u fshi me sukses!\n");
 }
+
 void updatePerdorues(int id_user){
     printf("Akoma");
 }
