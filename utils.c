@@ -79,7 +79,7 @@ int gjeneroIdUser()
               p.emri,
               p.username,
               p.password,
-              &p.buxheti_mujor) ==5){
+              &p.buxheti_vjetor) ==5){
                 if(p.id_user>last_id){
                     last_id=p.id_user;
                 }
@@ -133,7 +133,7 @@ int lexoDaten(int *dita, int *muaji, int *viti)
 
         if (maxDite == 0 ||
             *dita < 1 || *dita > maxDite ||
-            *viti < 1900 || *viti > 2100)
+            *viti<2024 || *viti>2026)
         {
             printf("Date e pavlefshme! Provo perseri.\n");
         }
@@ -187,7 +187,9 @@ float totalTeArdhura(int id_user)
                   t.data) == 5)
     {
         if (t.id_user == id_user)
+        {
             total += t.shuma;
+        }
     }
 
     fclose(f);
@@ -197,7 +199,10 @@ float totalTeArdhura(int id_user)
 float totalShpenzime(int id_user)
 {
     FILE *f = fopen("shpenzime.txt", "r");
-    if (!f) return 0;
+
+    if (f == NULL)
+        return 0;
+
     struct Shpenzim s;
     float total = 0;
     char username[20];
@@ -214,7 +219,9 @@ float totalShpenzime(int id_user)
                   s.data) == 9)
     {
         if (s.id_user == id_user)
+        {
             total += s.shuma;
+        }
     }
 
     fclose(f);
