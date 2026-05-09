@@ -378,17 +378,148 @@ void shfaqTeArdhura(int id_user)
 
 void raportMujor(int id_user)
 {
-    printf("raportMujor not implemented yet\n\n");
+    int muaji, viti;
+    printf("Muaji (1-12): "); scanf("%d", &muaji);
+    printf("Viti: "); scanf("%d", &viti);
+
+    FILE *fs = fopen("shpenzime.txt", "r");
+    FILE *fa = fopen("teArdhura.txt", "r");
+
+    struct Shpenzim s;
+    struct Te_Ardhura t;
+    char username[20];
+    float total_shp = 0, total_ard = 0;
+    int dd, mm, yy;
+
+    printf("\n===== RAPORT MUJOR: %02d/%04d =====\n", muaji, viti);
+
+    // Shpenzimet
+    printf("\n-- Shpenzimet --\n");
+    if (fs != NULL) {
+        while (fscanf(fs, "%d %d %s %s %d %s %s %f %s",
+                      &s.id_shpenzim, &s.id_user, s.pershkrim, username,
+                      &s.kategori.id_kategoria, s.kategori.emertimi,
+                      s.kategori.pershkrimi, &s.shuma, s.data) == 9) {
+            sscanf(s.data, "%d-%d-%d", &dd, &mm, &yy);
+            if (s.id_user == id_user && mm == muaji && yy == viti) {
+                printf("  [%d] %s - %s - %.2f ALL - %s\n",
+                       s.id_shpenzim, s.pershkrim, s.kategori.emertimi, s.shuma, s.data);
+                total_shp += s.shuma;
+            }
+        }
+        fclose(fs);
+    }
+
+    // Te ardhurat
+    printf("\n-- Te Ardhurat --\n");
+    if (fa != NULL) {
+        while (fscanf(fa, "%d %d %s %f %s",
+                      &t.id_burimi, &t.id_user, t.burimi, &t.shuma, t.data) == 5) {
+            sscanf(t.data, "%d-%d-%d", &dd, &mm, &yy);
+            if (t.id_user == id_user && mm == muaji && yy == viti) {
+                printf("  [%d] %s - %.2f ALL - %s\n",
+                       t.id_burimi, t.burimi, t.shuma, t.data);
+                total_ard += t.shuma;
+            }
+        }
+        fclose(fa);
+    }
+
+    printf("\n-- Permbledhje --\n");
+    printf("Total shpenzime  : %.2f\n", total_shp);
+    printf("Total te ardhura : %.2f\n", total_ard);
+    printf("Bilanci          : %.2f\n", total_ard - total_shp);
+    printf("\n\n");
 }
 
 void raportVjetor(int id_user)
 {
-    printf("raportVjetor not implemented yet\n\n");
+    int viti;
+    printf("Viti:");
+    scanf("%d",&viti);
+    FILE *fs = fopen("shpenzime.txt", "r");
+    FILE *fa = fopen("teArdhura.txt", "r");
+    struct Shpenzim s;
+    struct Te_Ardhura t;
+    char username[20];
+    float shp[13] = {0};
+    float ard[13] = {0}; //ruajn shumat per cdo muaj
+    int dd, mm, yy;
+
+    if (fs != NULL) {
+        while (fscanf(fs, "%d %d %s %s %d %s %s %f %s",
+                      &s.id_shpenzim, &s.id_user, s.pershkrim, username,
+                      &s.kategori.id_kategoria, s.kategori.emertimi,
+                      s.kategori.pershkrimi, &s.shuma, s.data) == 9) {
+            sscanf(s.data, "%d-%d-%d", &dd, &mm, &yy); // e ben split
+            if (s.id_user == id_user && yy == viti && mm >= 1 && mm <= 12)
+                shp[mm] += s.shuma;
+        }
+        fclose(fs);
+    }
+
+    if(fa!=NULL){
+        while(fscanf(fa,"%d %d %s %f %s",&t.id_burimi,&t.id_user,t.burimi,&t.shuma,t.data)==5){
+             sscanf(t.data, "%d-%d-%d", &dd, &mm, &yy);
+             if(t.id_user==id_user && yy==viti && mm>=1 && mm<=12){
+                ard[mm]+=t.shuma;
+             }
+        }
+        fclose(fa);
+    }
+
+    float total_shp = 0, total_ard = 0;
+
+    printf("\n===== RAPORT VJETOR: %04d =====\n", viti);
+    printf("%-6s %-12s %-12s %-12s\n", "Muaji", "Te Ardhura", "Shpenzime", "Bilanci");
+    printf("------------------------------------------\n");
+    for (int m = 1; m <= 12; m++) {
+        printf("%-6d %-12.2f %-12.2f %-12.2f\n",
+               m, ard[m], shp[m], ard[m] - shp[m]);
+        total_shp += shp[m];
+        total_ard += ard[m];
+    }
+    printf("------------------------------------------\n");
+    printf("%-6s %-12.2f %-12.2f %-12.2f\n",
+           "TOT", total_ard, total_shp, total_ard - total_shp);
 }
 
 void kontrolloBuxhetin(int id_user)
 {
-    printf("kontrolloBuxhetin not implemented yet\n\n");
+    FILE *fptr=fopen("user.txt","r");
+    if(fptr==NULL){
+        printf("Dicka shkoi keq!");
+        return;
+    }
+
+    struct Perdorues p;
+    float buxheti=0;
+
+    while(fscanf(fptr,"%d %s %s %s %f",&p.id_user,p.emri,p.username,p.password,&p.buxheti_vjetor)==5){
+        if(p.id_user==id_user){
+            buxheti=p.buxheti_vjetor;
+        }
+    }
+    fclose(fptr);
+
+    float te_ardhura=totalTeArdhura(id_user);
+    float shpenzime=totalShpenzime(id_user);
+    float mbetje=te_ardhura-shpenzime;
+
+    printf("========== KONTROLLO BUXHETIN ==========\n");
+    printf("Buxheti vjetor : %.2f\n", buxheti);
+    printf("Te ardhura     : %.2f\n", te_ardhura);
+    printf("Shpenzime      : %.2f\n", shpenzime);
+    printf("Mbetur         : %.2f\n", mbetje);
+
+    if (shpenzime > te_ardhura)
+        printf("[!] Ke tejkaluar te ardhurat!\n");
+    else if (mbetje < buxheti * 0.2f)
+        printf("[!] Ke shpenzuar mbi 80%% te buxhetit!\n");
+    else
+        printf("[OK] Buxheti eshte ne rregull.\n");
+
+    printf("\n\n");
 }
 
 void kerkoShpenzimSipasKategorise(int id_user, int id_kategori)
