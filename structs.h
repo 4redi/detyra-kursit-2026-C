@@ -7,7 +7,7 @@ struct Perdorues
     char emri[30];
     char username[20];
     char password[50];
-    float buxheti_mujor;
+    float buxheti_vjetor;
 };
 
 struct Kategoria
