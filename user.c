@@ -144,19 +144,19 @@ void shtoShpenzim(int id_user)
     }
 
     int found = 0;
-    float buxheti_mujor = 0;
+    float buxheti_vjetor = 0;
 
     while (fscanf(fu, "%d %s %s %s %f",
                   &p.id_user,
                   p.emri,
                   p.username,
                   p.password,
-                  &p.buxheti_mujor) == 5)
+                  &p.buxheti_vjetor) == 5)
     {
         if (p.id_user == id_user)
         {
             strcpy(username, p.username);
-            buxheti_mujor = p.buxheti_mujor;
+            buxheti_vjetor = p.buxheti_vjetor;
             found = 1;
             break;
         }
