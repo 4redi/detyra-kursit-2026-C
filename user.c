@@ -66,10 +66,7 @@ void userMenu(int id_user, char username[])
 
         case 8:
         {
-            int id_kategori;
-            printf("Vendos ID e kategorise: ");
-            scanf("%d", &id_kategori);
-            kerkoShpenzimSipasKategorise(id_user, id_kategori);
+            kerkoShpenzimSipasKategorise(id_user);
             break;
         }
 
@@ -102,7 +99,7 @@ void userMenu(int id_user, char username[])
         case 13:
         {
             char data[20];
-            printf("Vendos daten (p.sh. 2026-05-03): ");
+            printf("Vendos daten (p.sh. dd-mm-yyyy): ");
             scanf("%s", data);
             kerkoShpenzimSipasDate(id_user, data);
             break;
@@ -144,19 +141,17 @@ void shtoShpenzim(int id_user)
     }
 
     int found = 0;
-    float buxheti_vjetor = 0;
-
     while (fscanf(fu, "%d %s %s %s %f",
                   &p.id_user,
                   p.emri,
                   p.username,
                   p.password,
-                  &p.buxheti_vjetor) == 5)
+                  &p.buxheti_vjetor
+                  ) == 5)
     {
         if (p.id_user == id_user)
         {
             strcpy(username, p.username);
-            buxheti_vjetor = p.buxheti_vjetor;
             found = 1;
             break;
         }
@@ -229,6 +224,11 @@ void shtoShpenzim(int id_user)
     printf("Shuma: ");
     scanf("%f", &s.shuma);
 
+    if(s.shuma<=0){
+        printf("Shuma duhet me e madhe se 0!\n\n");
+        return;
+    }
+
     // Kontroll
     if (shpenzime + s.shuma > te_ardhura)
     {
@@ -281,6 +281,11 @@ void shtoTeArdhura(int id_user)
     scanf(" %s", t.burimi);
     printf("Shuma: ");
     scanf("%f", &t.shuma);
+
+    if(t.shuma<0){
+        printf("E ardhura duhet nr 0 ose pozitiv"); //LOGJIKA: mbase user mbase s'ka vertet lek
+        return;
+    }
 
     lexoDaten(&dita, &muaji, &viti);
     sprintf(t.data, "%02d-%02d-%04d", dita, muaji, viti);
@@ -522,9 +527,60 @@ void kontrolloBuxhetin(int id_user)
     printf("\n\n");
 }
 
-void kerkoShpenzimSipasKategorise(int id_user, int id_kategori)
+void kerkoShpenzimSipasKategorise(int id_user)
 {
-    printf("kerkoShpenzimSipasKategorise not implemented yet\n\n");
+    // si logjike: Thjesht vendos id e kategorise dhe aty ku id_user==vleren ne file, same thing per kategorine
+    FILE *fptr=fopen("shpenzime.txt","r");
+    FILE *kat=fopen("kategori.txt","r");
+    if(fptr==NULL || kat==NULL){
+        printf("Dicka shkoi keq!");
+        return;
+    }
+    struct Shpenzim s;
+    struct Kategoria k;
+    char username[20];
+    int found=0;
+
+    printf("\nKategorite:\n");
+    while (fscanf(kat, "%d %s %s",
+                  &k.id_kategoria,
+                  k.emertimi,
+                  k.pershkrimi) == 3)
+    {
+        printf("%d - %s\n", k.id_kategoria, k.emertimi);
+    }
+
+            int id_kategori;
+            printf("Vendos ID e kategorise: ");
+            scanf("%d", &id_kategori);
+
+
+
+    printf("============ Kerko shpenzim sipas kategorise: ============\n");
+    while (fscanf(fptr, "%d %d %s %s %d %s %s %f %s",
+           &s.id_shpenzim,
+           &s.id_user,
+           s.pershkrim,
+           username,
+           &s.kategori.id_kategoria,
+           s.kategori.emertimi,
+           s.kategori.pershkrimi,
+           &s.shuma,
+           s.data)==9){
+            if(s.id_user==id_user && s.kategori.id_kategoria==id_kategori){
+                printf("ID : %d | %s | %s | %.2f | %s\n",
+                       s.id_shpenzim,
+                       s.pershkrim,
+                       s.kategori.emertimi,
+                       s.shuma,
+                       s.data);
+                found=1;
+            }
+           }
+           if(!found){
+            printf("Nuk gjendet ndonje gje ne lidhje me kete :( ");
+           }
+           fclose(fptr);
 }
 
 void fshiShpenzim(int id_shpenzim)

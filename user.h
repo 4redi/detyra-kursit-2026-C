@@ -14,7 +14,7 @@ void shfaqTeArdhura(int id_user);
 void raportMujor(int id_user);
 void raportVjetor(int id_user);
 void kontrolloBuxhetin(int id_user);
-void kerkoShpenzimSipasKategorise(int id_user, int id_kategori);
+void kerkoShpenzimSipasKategorise(int id_user);
 void fshiShpenzim(int id_shpenzim);
 void renditShpenzimeSipasShumes(int id_user);
 void renditShpenzimeSipasDates(int id_user);
