@@ -133,7 +133,7 @@ int lexoDaten(int *dita, int *muaji, int *viti)
 
         if (maxDite == 0 ||
             *dita < 1 || *dita > maxDite ||
-            *viti<2024 || *viti>2026)
+            *viti!=2026)
         {
             printf("Date e pavlefshme! Provo perseri.\n");
         }
