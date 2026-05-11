@@ -96,19 +96,18 @@ void shfaqPerdoruesit(){
         printf("Skedari bosh");
     }
     struct Perdorues p;
-    printf("\n%-5s %-15s %-15s %-15s %-10s\n",
-           "ID", "Emri", "Username", "Password", "Buxheti");
-    printf("---------------------------------------------------------------------\n");
+    printf("\n%-5s %-15s %-15s\n",
+           "ID", "Emri", "Username");
+    printf("--------------------------------------\n");
 
     while(fscanf(fptr,"%d %s %s %s %f",&p.id_user,p.emri,p.username,p.password,&p.buxheti_vjetor)!=EOF){
-        printf("%-5d %-15s %-15s %-15s %-10.2f\n",
+        printf("%-5d %-15s %-15s\n",
                p.id_user,
                p.emri,
-               p.username,
-               p.password,
-               p.buxheti_vjetor);
+               p.username);
     }
     fclose(fptr);
+    printf("\n\n");
 }
 
 void shfaqTeTerePerdoruesit(){
