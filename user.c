@@ -129,41 +129,7 @@ void userMenu(int id_user, char username[])
 
 void shtoShpenzim(int id_user)
 {
-    char username[20];
-    struct Perdorues p;
     int dita, muaji, viti;
-
-    FILE *fu = fopen("user.txt", "r");
-    if (fu == NULL)
-    {
-        printf("Gabim ne hapjen e user.txt!\n");
-        return;
-    }
-
-    int found = 0;
-    while (fscanf(fu, "%d %s %s %s %f",
-                  &p.id_user,
-                  p.emri,
-                  p.username,
-                  p.password,
-                  &p.buxheti_vjetor
-                  ) == 5)
-    {
-        if (p.id_user == id_user)
-        {
-            strcpy(username, p.username);
-            found = 1;
-            break;
-        }
-    }
-
-    fclose(fu);
-
-    if (!found)
-    {
-        printf("Useri nuk u gjet!\n");
-        return;
-    }
 
     float te_ardhura = totalTeArdhura(id_user);
     float shpenzime = totalShpenzime(id_user);
@@ -249,11 +215,10 @@ void shtoShpenzim(int id_user)
         return;
     }
 
-    fprintf(f, "%d %d %s %s %d %s %s %.2f %s\n",
+    fprintf(f, "%d %d %s %d %s %s %.2f %s\n",
             s.id_shpenzim,
             s.id_user,
             s.pershkrim,
-            username,
             s.kategori.id_kategoria,
             s.kategori.emertimi,
             s.kategori.pershkrimi,
@@ -311,19 +276,17 @@ void shfaqShpenzime(int id_user)
     {
         printf("Dicka shkoi keq!");
     }
-    char username[20];
-    printf("\n%-12s %-10s %-20s %-15s %-15s %-20s %-20s %-10s %-12s\n",
-           "ID_Shpenzim", "ID_User", "Pershkrim", "Username",
+    printf("\n%-12s %-10s  %-15s %-15s %-20s %-20s %-10s %-12s\n",
+           "ID_Shpenzim", "ID_User", "Pershkrim",
            "ID_Kat", "Kategoria", "Kat_Pershkrim",
            "Shuma", "Data");
 
     printf("-------------------------------------------------------------------------------------------------------------------------------\n");
 
-    while (fscanf(fptr, "%d %d %s %s %d %s %s %f %s",
+    while (fscanf(fptr, "%d %d %s %d %s %s %f %s",
                   &s.id_shpenzim,
                   &s.id_user,
                   s.pershkrim,
-                  username,
                   &s.kategori.id_kategoria,
                   s.kategori.emertimi,
                   s.kategori.pershkrimi,
@@ -332,11 +295,10 @@ void shfaqShpenzime(int id_user)
     {
         if (s.id_user == id_user)
         {
-            printf("%-12d %-10d %-20s %-15s %-10d %-15s %-20s %-10.2f %-12s\n",
+            printf("%-12d %-10d %-20s %-10d %-15s %-20s %-10.2f %-12s\n",
                    s.id_shpenzim,
                    s.id_user,
                    s.pershkrim,
-                   username,
                    s.kategori.id_kategoria,
                    s.kategori.emertimi,
                    s.kategori.pershkrimi,
@@ -392,7 +354,6 @@ void raportMujor(int id_user)
 
     struct Shpenzim s;
     struct Te_Ardhura t;
-    char username[20];
     float total_shp = 0, total_ard = 0;
     int dd, mm, yy;
 
@@ -401,10 +362,10 @@ void raportMujor(int id_user)
     // Shpenzimet
     printf("\n-- Shpenzimet --\n");
     if (fs != NULL) {
-        while (fscanf(fs, "%d %d %s %s %d %s %s %f %s",
-                      &s.id_shpenzim, &s.id_user, s.pershkrim, username,
+        while (fscanf(fs, "%d %d %s %d %s %s %f %s",
+                      &s.id_shpenzim, &s.id_user, s.pershkrim,
                       &s.kategori.id_kategoria, s.kategori.emertimi,
-                      s.kategori.pershkrimi, &s.shuma, s.data) == 9) {
+                      s.kategori.pershkrimi, &s.shuma, s.data) == 8) {
             sscanf(s.data, "%d-%d-%d", &dd, &mm, &yy);
             if (s.id_user == id_user && mm == muaji && yy == viti) {
                 printf("  [%d] %s - %s - %.2f ALL - %s\n",
@@ -446,16 +407,15 @@ void raportVjetor(int id_user)
     FILE *fa = fopen("teArdhura.txt", "r");
     struct Shpenzim s;
     struct Te_Ardhura t;
-    char username[20];
     float shp[13] = {0};
     float ard[13] = {0}; //ruajn shumat per cdo muaj
     int dd, mm, yy;
 
     if (fs != NULL) {
-        while (fscanf(fs, "%d %d %s %s %d %s %s %f %s",
-                      &s.id_shpenzim, &s.id_user, s.pershkrim, username,
+        while (fscanf(fs, "%d %d %s %d %s %s %f %s",
+                      &s.id_shpenzim, &s.id_user, s.pershkrim,
                       &s.kategori.id_kategoria, s.kategori.emertimi,
-                      s.kategori.pershkrimi, &s.shuma, s.data) == 9) {
+                      s.kategori.pershkrimi, &s.shuma, s.data) == 8) {
             sscanf(s.data, "%d-%d-%d", &dd, &mm, &yy); // e ben split
             if (s.id_user == id_user && yy == viti && mm >= 1 && mm <= 12)
                 shp[mm] += s.shuma;
@@ -538,7 +498,6 @@ void kerkoShpenzimSipasKategorise(int id_user)
     }
     struct Shpenzim s;
     struct Kategoria k;
-    char username[20];
     int found=0;
 
     printf("\nKategorite:\n");
@@ -557,11 +516,10 @@ void kerkoShpenzimSipasKategorise(int id_user)
 
 
     printf("============ Kerko shpenzim sipas kategorise: ============\n");
-    while (fscanf(fptr, "%d %d %s %s %d %s %s %f %s",
+    while (fscanf(fptr, "%d %d %s %d %s %s %f %s",
            &s.id_shpenzim,
            &s.id_user,
            s.pershkrim,
-           username,
            &s.kategori.id_kategoria,
            s.kategori.emertimi,
            s.kategori.pershkrimi,
