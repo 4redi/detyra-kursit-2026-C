@@ -10,5 +10,6 @@ int eshtVitiBisht(int viti);
 int diteNeMuaj(int muaji, int viti);
 float totalTeArdhura(int id_user);
 float totalShpenzime(int id_user);
+int gjeneroIdKategori();
 int gjeneroIdArdhure();
 #endif

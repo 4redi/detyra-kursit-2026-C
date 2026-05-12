@@ -254,3 +254,21 @@ int gjeneroIdArdhure() {
 
     return last_id + 1;
 }
+
+int gjeneroIdKategori(){
+    FILE *fptr=fopen("kategori.txt","r");
+    if(fptr==NULL){
+        return 1;
+    }
+    int last_id=0;
+    struct Kategoria k;
+    while(fscanf(fptr,"%d %s %s",&k.id_kategoria,k.emertimi,k.pershkrimi)==3){
+        if(k.id_kategoria>last_id){
+            last_id=k.id_kategoria;
+        }
+    }
+
+    fclose(fptr);
+    return last_id+1;
+
+}
