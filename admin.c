@@ -7,9 +7,7 @@
 #include "structs.h"
 #include "auth.h"
 #include "utils.h"
-#include<errno.h>
-
-
+#include <errno.h>
 
 void adminMenu()
 {
@@ -18,81 +16,84 @@ void adminMenu()
     int choice;
     int id_user;
     char username[20];
-    do{
-       printf("1.Shtoni perdorues\n");
-       printf("2.Shfaq perdoruesit\n");
-       printf("3.Kerko perdorues sipas Id\n");
-       printf("4.Fshini kredincialet e nje perdoruesi\n");
-       printf("5.Ndryshoni te dhenat e nje perdoruesi ekzistues\n");
-       printf("6.Printoni te gjithe te dhenat perdoruesve\n");
-       printf("7.Kerko sipas username\n");
-       printf("8.Rradhisni te gjithe perdoruesit sipas username (A-Z)\n");
-       printf("9.Shto/Ndrysho/Fshi kategori\n");
-       printf("10.Statistika te sistemit (Nr perdoruesish,numri total i shpenzimeve,perdoruesi me me shume/pak shpenzime)\n");
-       printf("11.Dilni nga menuja e Administratorit\n");
-       printf("Vendosni zgjedhjen tuaj:");
-       scanf("%d",&choice);
-       printf("\n");
+    do
+    {
+        printf("1.Shtoni perdorues\n");
+        printf("2.Shfaq perdoruesit\n");
+        printf("3.Kerko perdorues sipas Id\n");
+        printf("4.Fshini kredincialet e nje perdoruesi\n");
+        printf("5.Ndryshoni te dhenat e nje perdoruesi ekzistues\n");
+        printf("6.Printoni te gjithe te dhenat perdoruesve\n");
+        printf("7.Kerko sipas username\n");
+        printf("8.Rradhisni te gjithe perdoruesit sipas username (A-Z)\n");
+        printf("9.Shto/Ndrysho/Fshi kategori\n");
+        printf("10.Statistika te sistemit (Nr perdoruesish,numri total i shpenzimeve,perdoruesi me me shume/pak shpenzime)\n");
+        printf("11.Dilni nga menuja e Administratorit\n");
+        printf("Vendosni zgjedhjen tuaj:");
+        scanf("%d", &choice);
+        printf("\n");
 
-       switch(choice){
+        switch (choice)
+        {
         case 1:
-        shtoPerdorues();
-        break;
+            shtoPerdorues();
+            break;
         case 2:
-        shfaqPerdoruesit();
-        break;
+            shfaqPerdoruesit();
+            break;
         case 3:
-        printf("Vendosni id qe doni te kerkoni:");
-        scanf("%d",&id_user);
-        kerkoSipasId(id_user);
-        printf("\n\n");
-        break;
+            printf("Vendosni id qe doni te kerkoni:");
+            scanf("%d", &id_user);
+            kerkoSipasId(id_user);
+            printf("\n\n");
+            break;
         case 4:
-        printf("Vendosni id qe doni te fshihni:");
-        scanf("%d",&id_user);
-        fshiPerdorues(id_user);
-        break;
+            printf("Vendosni id qe doni te fshihni:");
+            scanf("%d", &id_user);
+            fshiPerdorues(id_user);
+            break;
         case 5:
-        printf("Vendosni id qe doni te update:");
-        scanf("%d",&id_user);
-        updatePerdorues(id_user);
-        break;
+            printf("Vendosni id qe doni te update:");
+            scanf("%d", &id_user);
+            updatePerdorues(id_user);
+            break;
         case 6:
-        shfaqTeTerePerdoruesit();
-        break;
+            shfaqTeTerePerdoruesit();
+            break;
         case 7:
-        printf("Vendosni username qe doni te kerkoni:");
-        scanf("%s",username);
-        kerkoSipasUsername(username);
-        break;
+            printf("Vendosni username qe doni te kerkoni:");
+            scanf("%s", username);
+            kerkoSipasUsername(username);
+            break;
         case 8:
-        rradhitSipasUsername();
-        break;
+            rradhitSipasUsername();
+            break;
         case 9:
-        adminMenuKategori();
-        break;
+            adminMenuKategori();
+            break;
         case 10:
-        statistika();
-        break;
+            statistika();
+            break;
         case 11:
-        menuja();
-        break;
+            menuja();
+            break;
         default:
-        printf("Zgjedhje e pavlefshme!");
-       }
-    }while(choice!=11);
+            printf("Zgjedhje e pavlefshme!");
+        }
+    } while (choice != 11);
 }
 
-
-
-void shtoPerdorues(){
+void shtoPerdorues()
+{
     regjistroPerdorues();
     printf("\n\n");
 }
-void shfaqPerdoruesit(){
-    FILE *fptr=fopen("user.txt","r");
+void shfaqPerdoruesit()
+{
+    FILE *fptr = fopen("user.txt", "r");
 
-    if(fptr==NULL){
+    if (fptr == NULL)
+    {
         printf("Skedari bosh");
     }
     struct Perdorues p;
@@ -100,7 +101,8 @@ void shfaqPerdoruesit(){
            "ID", "Emri", "Username");
     printf("--------------------------------------\n");
 
-    while(fscanf(fptr,"%d %s %s %s %f",&p.id_user,p.emri,p.username,p.password,&p.buxheti_vjetor)!=EOF){
+    while (fscanf(fptr, "%d %s %s %s %f", &p.id_user, p.emri, p.username, p.password, &p.buxheti_vjetor) != EOF)
+    {
         printf("%-5d %-15s %-15s\n",
                p.id_user,
                p.emri,
@@ -110,9 +112,11 @@ void shfaqPerdoruesit(){
     printf("\n\n");
 }
 
-void shfaqTeTerePerdoruesit(){
+void shfaqTeTerePerdoruesit()
+{
     FILE *fu = fopen("user.txt", "r");
-    if (fu == NULL) {
+    if (fu == NULL)
+    {
         printf("Asnje perdorues!\n");
         return;
     }
@@ -122,7 +126,8 @@ void shfaqTeTerePerdoruesit(){
     printf("----------------------------------------------------------------------------------------\n");
 
     while (fscanf(fu, "%d %s %s %s %f",
-                  &p.id_user, p.emri, p.username, p.password, &p.buxheti_vjetor) == 5) {
+                  &p.id_user, p.emri, p.username, p.password, &p.buxheti_vjetor) == 5)
+    {
         float ardhura = totalTeArdhura(p.id_user);
         float shpenzime = totalShpenzime(p.id_user);
         printf("%-5d %-15s %-15s %-15s %-12.2f %-12.2f %-12.2f\n",
@@ -132,44 +137,50 @@ void shfaqTeTerePerdoruesit(){
     fclose(fu);
 }
 
-
-void kerkoSipasId(int id_user){
-    FILE *fptr=fopen("user.txt","r");
-    if(fptr==NULL){
+void kerkoSipasId(int id_user)
+{
+    FILE *fptr = fopen("user.txt", "r");
+    if (fptr == NULL)
+    {
         printf("Dicka shkoi keq!");
         return;
     }
     struct Perdorues p;
-    int found=0;
+    int found = 0;
 
     while (fscanf(fptr, "%d %s %s %s %f",
-                  &p.id_user, p.emri, p.username, p.password, &p.buxheti_vjetor) == 5) {
-        if (p.id_user == id_user) {
+                  &p.id_user, p.emri, p.username, p.password, &p.buxheti_vjetor) == 5)
+    {
+        if (p.id_user == id_user)
+        {
             printf("\nID       : %d\n", p.id_user);
             printf("Emri     : %s\n", p.emri);
             printf("Username : %s\n", p.username);
             printf("Password : %s\n", p.password);
             printf("Buxheti  : %.2f\n", p.buxheti_vjetor);
-            printf("Shpenzime Totale  : %.2f\n",totalShpenzime(p.id_user));
-            printf("Ardhura Totale  : %.2f\n",totalTeArdhura(p.id_user));\
-            printf("Mbetja  : %.2f\n",totalTeArdhura(p.id_user)-totalShpenzime(p.id_user));
+            printf("Shpenzime Totale  : %.2f\n", totalShpenzime(p.id_user));
+            printf("Ardhura Totale  : %.2f\n", totalTeArdhura(p.id_user));
+            printf("Mbetja  : %.2f\n", totalTeArdhura(p.id_user) - totalShpenzime(p.id_user));
             found = 1;
             break;
         }
     }
 
     fclose(fptr);
-    if(!found){
-        printf("Perdoruesi me %d ID nuk ekziston!",id_user);
+    if (!found)
+    {
+        printf("Perdoruesi me %d ID nuk ekziston!", id_user);
     }
     printf("\n\n");
 }
-void fshiPerdorues(int id_user){
+void fshiPerdorues(int id_user)
+{
 
     FILE *fptr = fopen("user.txt", "r");
     FILE *temp = fopen("users_temp.txt", "w");
 
-    if(fptr == NULL || temp == NULL){
+    if (fptr == NULL || temp == NULL)
+    {
         printf("Dicka shkoi keq!\n");
         return;
     }
@@ -179,14 +190,16 @@ void fshiPerdorues(int id_user){
     struct Te_Ardhura t;
     int found = 0;
 
-    while(fscanf(fptr, "%d %s %s %s %f",
-                 &p.id_user,
-                 p.emri,
-                 p.username,
-                 p.password,
-                 &p.buxheti_vjetor) == 5){
+    while (fscanf(fptr, "%d %s %s %s %f",
+                  &p.id_user,
+                  p.emri,
+                  p.username,
+                  p.password,
+                  &p.buxheti_vjetor) == 5)
+    {
 
-        if(p.id_user == id_user){
+        if (p.id_user == id_user)
+        {
             found = 1;
             continue;
         }
@@ -202,21 +215,21 @@ void fshiPerdorues(int id_user){
     fclose(fptr);
     fclose(temp);
 
-    fcloseall(); //kam lene file hapur diku
+    fcloseall(); // kam lene file hapur diku
 
-    if(!found){
+    if (!found)
+    {
         remove("users_temp.txt");
         printf("Perdoruesi nuk u gjet!\n");
         return;
     }
 
     remove("user.txt");
-     rename("users_temp.txt", "user.txt");
-
+    rename("users_temp.txt", "user.txt");
 
     // sjpenzimet
-    FILE *fs=fopen("shpenzime.txt","r");
-    FILE *tempS=fopen("temp_shpenzime.txt","w");
+    FILE *fs = fopen("shpenzime.txt", "r");
+    FILE *tempS = fopen("temp_shpenzime.txt", "w");
 
     if (fs != NULL && tempS != NULL)
     {
@@ -288,26 +301,31 @@ void fshiPerdorues(int id_user){
     printf("Perdoruesi u fshi me sukses!\n");
 }
 
-void updatePerdorues(int id_user){
-    FILE *fptr=fopen("user.txt","r");
-    FILE *temp=fopen("temp.txt","w");
+void updatePerdorues(int id_user)
+{
+    FILE *fptr = fopen("user.txt", "r");
+    FILE *temp = fopen("temp.txt", "w");
 
-    if(fptr==NULL||temp==NULL){
+    if (fptr == NULL || temp == NULL)
+    {
         printf("Gabim ne hapjen e file-ve");
         return;
     }
 
     struct Perdorues p;
-    int found=0;
+    int found = 0;
     char newUsername[20];
-    while(fscanf(fptr,"%d %s %s %s %f",&p.id_user,p.emri,p.username,p.password,&p.buxheti_vjetor)==5){
-        if(p.id_user==id_user){
-            found=1;
+    while (fscanf(fptr, "%d %s %s %s %f", &p.id_user, p.emri, p.username, p.password, &p.buxheti_vjetor) == 5)
+    {
+        if (p.id_user == id_user)
+        {
+            found = 1;
             printf("Username aktual: %s\n", p.username);
 
-            do{
+            do
+            {
                 printf("Vendos nje username te ri:");
-                scanf("%s",newUsername);
+                scanf("%s", newUsername);
                 if (!eshtUsernameUnik(newUsername))
                 {
                     printf("Username ekziston!\n");
@@ -316,8 +334,8 @@ void updatePerdorues(int id_user){
                 {
                     printf("Username duhet te kete te pakten 5 karaktere!\n");
                 }
-            }while(!eshtUsernameUnik(newUsername));
-            strcpy(p.username,newUsername);
+            } while (!eshtUsernameUnik(newUsername));
+            strcpy(p.username, newUsername);
         }
 
         fprintf(temp, "%d %s %s %s %.2f\n",
@@ -331,7 +349,8 @@ void updatePerdorues(int id_user){
     fclose(temp);
     fcloseall();
 
-    if (!found) {
+    if (!found)
+    {
         remove("temp.txt");
         printf("Perdoruesi nuk u gjet!\n");
         return;
@@ -342,10 +361,12 @@ void updatePerdorues(int id_user){
 
     printf("Username u ndryshua me sukses!\n");
 }
-void kerkoSipasUsername(char username[]){
+void kerkoSipasUsername(char username[])
+{
     FILE *fptr = fopen("user.txt", "r");
 
-    if (fptr == NULL) {
+    if (fptr == NULL)
+    {
         printf("Gabim ne hapjen e file!\n");
         return;
     }
@@ -369,14 +390,16 @@ void kerkoSipasUsername(char username[]){
 
     fclose(fptr);
 
-    if (!found) {
+    if (!found)
+    {
         printf("Perdoruesi nuk u gjet!\n");
         return;
     }
 
     int choice;
 
-    do {
+    do
+    {
 
         printf("\n===== USER MENU =====\n");
         printf("Username : %s\n", p.username);
@@ -390,57 +413,63 @@ void kerkoSipasUsername(char username[]){
         printf("Zgjedhja: ");
         scanf("%d", &choice);
 
-        switch(choice)
+        switch (choice)
         {
-            case 1:
-                printf("\n===== INFO =====\n");
-                printf("ID         : %d\n", p.id_user);
-                printf("Emri       : %s\n", p.emri);
-                printf("Username   : %s\n", p.username);
-                printf("Buxheti    : %.2f\n", p.buxheti_vjetor);
-                break;
-            case 2:
-                printf("\nTotal shpenzime: %.2f\n",
-                totalShpenzime(p.id_user));
-                break;
-            case 3:
-                printf("\nTotal te ardhura: %.2f\n",
-                totalTeArdhura(p.id_user));
-                break;
-            case 4:
-            {
-                float ard = totalTeArdhura(p.id_user);
-                float shp = totalShpenzime(p.id_user);
-                printf("\nBilanci: %.2f\n", ard - shp);
-                break;
-            }
-            case 5:
-                break;
-            default:
-                printf("Zgjedhje e pavlefshme!\n");
+        case 1:
+            printf("\n===== INFO =====\n");
+            printf("ID         : %d\n", p.id_user);
+            printf("Emri       : %s\n", p.emri);
+            printf("Username   : %s\n", p.username);
+            printf("Buxheti    : %.2f\n", p.buxheti_vjetor);
+            break;
+        case 2:
+            printf("\nTotal shpenzime: %.2f\n",
+                   totalShpenzime(p.id_user));
+            break;
+        case 3:
+            printf("\nTotal te ardhura: %.2f\n",
+                   totalTeArdhura(p.id_user));
+            break;
+        case 4:
+        {
+            float ard = totalTeArdhura(p.id_user);
+            float shp = totalShpenzime(p.id_user);
+            printf("\nBilanci: %.2f\n", ard - shp);
+            break;
+        }
+        case 5:
+            break;
+        default:
+            printf("Zgjedhje e pavlefshme!\n");
         }
 
-    } while(choice != 5);
+    } while (choice != 5);
 }
-void rradhitSipasUsername(){
+void rradhitSipasUsername()
+{
     // mendoje si nje array dhe do i besh order me bubble sort
 
-    FILE *fptr=fopen("user.txt","r");
-    if(fptr==NULL){
+    FILE *fptr = fopen("user.txt", "r");
+    if (fptr == NULL)
+    {
         printf("Dicka shkoi keq");
         return;
     }
     struct Perdorues p[100];
-    int n=0; //iteruesja
-    while(fscanf(fptr,"%d %s %s %s %f",&p[n].id_user,p[n].emri,p[n].username,p[n].password,&p[n].buxheti_vjetor)==5){
+    int n = 0; // iteruesja
+    while (fscanf(fptr, "%d %s %s %s %f", &p[n].id_user, p[n].emri, p[n].username, p[n].password, &p[n].buxheti_vjetor) == 5)
+    {
         n++;
     }
 
     fclose(fptr);
 
-    for (int i = 0; i < n - 1; i++) {
-        for (int j = 0; j < n - i - 1; j++) {
-            if (strcmp(p[j].username, p[j + 1].username) > 0) {
+    for (int i = 0; i < n - 1; i++)
+    {
+        for (int j = 0; j < n - i - 1; j++)
+        {
+            if (strcmp(p[j].username, p[j + 1].username) > 0)
+            {
                 struct Perdorues temp = p[j];
                 p[j] = p[j + 1];
                 p[j + 1] = temp;
@@ -449,15 +478,88 @@ void rradhitSipasUsername(){
     }
 
     printf("User-at e afishuar :\n");
-    for(int i=0;i<n;i++){
-        printf("%s\n",p[i].username);
+    for (int i = 0; i < n; i++)
+    {
+        printf("%s\n", p[i].username);
     }
-
 }
-void adminMenuKategori(){
-    printf("Akoma");
+void adminMenuKategori()
+{
+    printf("========= Menu kategori =========\n");
+    int choice;
+    struct Kategoria k;
+    do
+    {
+        printf("1. Shih kategorite\n");
+        printf("2. Shto kategori\n");
+        printf("3. Perditeso kategori\n");
+        printf("4. Fshi kategori\n");
+        printf("5.Dil\n");
+
+        printf("Zgjedhja:");
+        scanf("%d", &choice);
+
+        switch (choice)
+        {
+        case 1:
+        {
+            FILE *kat = fopen("kategori.txt", "r");
+            if (kat == NULL)
+            {
+                printf("Nuk mund te hapet kategori.txt\n");
+                break;
+            }
+            printf("\n%40s\n", "==========Kategorite==========");
+            while (fscanf(kat, "%d %s %s",
+                          &k.id_kategoria,
+                          k.emertimi,
+                          k.pershkrimi) == 3)
+            {
+                printf("%d - %s - %s\n", k.id_kategoria, k.emertimi, k.pershkrimi);
+            }
+            fclose(kat);
+            printf("\n\n");
+            break;
+        }
+        case 2:
+        {
+            FILE *kat = fopen("kategori.txt", "a");
+            if (kat == NULL)
+            {
+                printf("Dicka shkoi keq");
+                return;
+            }
+            k.id_kategoria = gjeneroIdKategori();
+            printf("Vendosni emertimin:");
+            scanf(" %[^\n]",k.emertimi);
+            printf("Vendosni pershkrimin:");
+            scanf(" %[^\n]",k.pershkrimi);
+
+            fprintf(kat, "%d %s %s\n",
+                    k.id_kategoria,
+                    k.emertimi,
+                    k.pershkrimi);
+
+            printf("Kategoria e %d u shtua me sukses!",k.id_kategoria);
+            fclose(kat);
+            printf("\n\n");
+            break;
+        }
+        case 3:
+            // update
+            break;
+        case 4:
+            // fshirje
+            break;
+        case 5:
+            break;
+        default:
+            printf("Zgjedhje e pavlefshme!");
+        }
+
+    } while (choice != 5);
 } // crud per kategorine
-void statistika(){
+void statistika()
+{
     printf("Akoma");
 }
-
