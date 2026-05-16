@@ -205,18 +205,16 @@ float totalShpenzime(int id_user)
 
     struct Shpenzim s;
     float total = 0;
-    char username[20];
 
-    while (fscanf(f, "%d %d %s %s %d %s %s %f %s",
+    while (fscanf(f, "%d %d %s %d %s %s %f %s",
                   &s.id_shpenzim,
                   &s.id_user,
                   s.pershkrim,
-                  username,
                   &s.kategori.id_kategoria,
                   s.kategori.emertimi,
                   s.kategori.pershkrimi,
                   &s.shuma,
-                  s.data) == 9)
+                  s.data) == 8)
     {
         if (s.id_user == id_user)
         {
