@@ -121,8 +121,8 @@ void shfaqTeTerePerdoruesit()
         return;
     }
     struct Perdorues p;
-    printf("\n%-5s %-15s %-15s %-15s %-12s %-12s %-12s\n",
-           "ID", "Emri", "Username", "Password", "Buxheti", "Te Ardhura", "Shpenzime");
+    printf("\n%-5s %-15s %-15s %-12s %-12s %-12s\n",
+           "ID", "Emri", "Username", "Buxheti", "Te Ardhura", "Shpenzime");
     printf("----------------------------------------------------------------------------------------\n");
 
     while (fscanf(fu, "%d %s %s %s %f",
@@ -130,8 +130,8 @@ void shfaqTeTerePerdoruesit()
     {
         float ardhura = totalTeArdhura(p.id_user);
         float shpenzime = totalShpenzime(p.id_user);
-        printf("%-5d %-15s %-15s %-15s %-12.2f %-12.2f %-12.2f\n",
-               p.id_user, p.emri, p.username, p.password,
+        printf("%-5d %-15s %-15s %-12.2f %-12.2f %-12.2f\n",
+               p.id_user, p.emri, p.username,
                p.buxheti_vjetor, ardhura, shpenzime);
     }
     fclose(fu);
@@ -259,6 +259,7 @@ void fshiPerdorues(int id_user)
 
         fclose(fs);
         fclose(tempS);
+        fcloseall();
 
         remove("shpenzime.txt");
         rename("temp_shpenzime.txt", "shpenzime.txt");
@@ -546,10 +547,164 @@ void adminMenuKategori()
             break;
         }
         case 3:
-            // update
-            break;
-        case 4:
-            // fshirje
+{
+    int id, found = 0;
+    char updatedName[50];
+    char updatedDesc[100];
+
+    printf("Vendos ID e kategorise qe doni te perditesoni: ");
+    scanf("%d", &id);
+
+    FILE *kat = fopen("kategori.txt", "r");
+    FILE *temp = fopen("temp_kategori.txt", "w");
+
+    if (kat == NULL || temp == NULL)
+    {
+        printf("Gabim ne hapjen e file!\n");
+        break;
+    }
+
+    struct Kategoria k;
+
+    // ===== UPDATE kategori.txt =====
+    while (fscanf(kat, "%d %s %s",
+                  &k.id_kategoria,
+                  k.emertimi,
+                  k.pershkrimi) == 3)
+    {
+        if (k.id_kategoria == id)
+        {
+            found = 1;
+
+            printf("Emertimi i ri: ");
+            scanf(" %[^\n]", updatedName);
+
+            printf("Pershkrimi i ri: ");
+            scanf(" %[^\n]", updatedDesc);
+
+            strcpy(k.emertimi, updatedName);
+            strcpy(k.pershkrimi, updatedDesc);
+        }
+
+        fprintf(temp, "%d %s %s\n",
+                k.id_kategoria,
+                k.emertimi,
+                k.pershkrimi);
+    }
+
+    fclose(kat);
+    fclose(temp);
+
+    if (!found)
+    {
+        remove("temp_kategori.txt");
+        printf("Kategoria nuk u gjet!\n");
+        break;
+    }
+
+    remove("kategori.txt");
+    rename("temp_kategori.txt", "kategori.txt");
+
+    printf("Kategoria u perditesua me sukses!\n");
+
+    // ===== UPDATE shpenzime.txt =====
+    FILE *fs = fopen("shpenzime.txt", "r");
+    FILE *tempS = fopen("temp_shpenzime.txt", "w");
+
+    if (fs == NULL || tempS == NULL)
+    {
+        printf("Gabim ne hapjen e shpenzimeve!\n");
+        break;
+    }
+
+    struct Shpenzim s;
+
+    while (fscanf(fs, "%d %d %s %d %s %s %f %s",
+                  &s.id_shpenzim,
+                  &s.id_user,
+                  s.pershkrim,
+                  &s.kategori.id_kategoria,
+                  s.kategori.emertimi,
+                  s.kategori.pershkrimi,
+                  &s.shuma,
+                  s.data) == 8)
+    {
+        if (s.kategori.id_kategoria == id)
+        {
+            strcpy(s.kategori.emertimi, updatedName);
+            strcpy(s.kategori.pershkrimi, updatedDesc);
+        }
+
+        fprintf(tempS, "%d %d %s %d %s %s %.2f %s\n",
+                s.id_shpenzim,
+                s.id_user,
+                s.pershkrim,
+                s.kategori.id_kategoria,
+                s.kategori.emertimi,
+                s.kategori.pershkrimi,
+                s.shuma,
+                s.data);
+    }
+
+    fclose(fs);
+    fclose(tempS);
+
+    remove("shpenzime.txt");
+    rename("temp_shpenzime.txt", "shpenzime.txt");
+
+    break;
+}
+            case 4:
+            {
+                int id, found = 0;
+
+                printf("Vendos ID e kategorise qe doni te fshini: ");
+                scanf("%d", &id);
+
+                FILE *kat = fopen("kategori.txt", "r");
+                FILE *temp = fopen("temp_kategori.txt", "w");
+
+                if (kat == NULL || temp == NULL)
+                {
+                    printf("Gabim ne hapjen e file!\n");
+                    break;
+                }
+
+                while (fscanf(kat, "%d %s %s",
+                              &k.id_kategoria,
+                              k.emertimi,
+                              k.pershkrimi) == 3)
+                {
+                    if (k.id_kategoria == id)
+                    {
+                        found = 1;
+                        continue;
+                    }
+
+                    fprintf(temp, "%d %s %s\n",
+                            k.id_kategoria,
+                            k.emertimi,
+                            k.pershkrimi);
+                }
+
+                fclose(kat);
+                fclose(temp);
+
+                if (!found)
+                {
+                    remove("temp_kategori.txt");
+                    printf("Kategoria nuk u gjet!\n");
+                }
+                else
+                {
+                    remove("kategori.txt");
+                    rename("temp_kategori.txt", "kategori.txt");
+
+                    printf("Kategoria u fshi me sukses!\n");
+                }
+
+                break;
+            }
             break;
         case 5:
             break;
@@ -558,8 +713,136 @@ void adminMenuKategori()
         }
 
     } while (choice != 5);
-} // crud per kategorine
+} 
 void statistika()
 {
-    printf("Akoma");
+    FILE *fu = fopen("user.txt", "r");
+
+    if (fu == NULL)
+    {
+        printf("Nuk mund te hapet user.txt!\n");
+        return;
+    }
+
+    struct Perdorues p;
+
+    // ===== lexo user-in e pare =====
+
+    if (fscanf(fu, "%d %19s %19s %19s %f",
+               &p.id_user,
+               p.emri,
+               p.username,
+               p.password,
+               &p.buxheti_vjetor) != 5)
+    {
+        printf("Nuk ka perdorues!\n");
+        fclose(fu);
+        return;
+    }
+
+    int totalUsers = 1;
+
+    float userExpenses = totalShpenzime(p.id_user);
+    float userIncome = totalTeArdhura(p.id_user);
+
+    float totalExpensesSystem = userExpenses;
+    float totalIncomeSystem = userIncome;
+
+    float maxExpenses = userExpenses;
+    float minExpenses = userExpenses;
+
+    char maxUser[50];
+    char minUser[50];
+
+    int maxUserId = p.id_user;
+    int minUserId = p.id_user;
+
+    strcpy(maxUser, p.username);
+    strcpy(minUser, p.username);
+
+    // ===== vazhdo me user-at e tjere =====
+
+    while (fscanf(fu, "%d %19s %19s %19s %f",
+                  &p.id_user,
+                  p.emri,
+                  p.username,
+                  p.password,
+                  &p.buxheti_vjetor) == 5)
+    {
+        totalUsers++;
+
+        float exp = totalShpenzime(p.id_user);
+        float inc = totalTeArdhura(p.id_user);
+
+        totalExpensesSystem += exp;
+        totalIncomeSystem += inc;
+
+        if (exp > maxExpenses)
+        {
+            maxExpenses = exp;
+            strcpy(maxUser, p.username);
+            maxUserId = p.id_user;
+        }
+
+        if (exp < minExpenses)
+        {
+            minExpenses = exp;
+            strcpy(minUser, p.username);
+            minUserId = p.id_user;
+        }
+    }
+
+    fclose(fu);
+
+    // ==== expenses count =====
+    int totalExpenses=0;
+    FILE *fs=fopen("shpenzime.txt","r");
+    if(fs==NULL){
+        printf("Dicka shkoi keq");
+        return;
+    }
+    struct Shpenzim s;
+    while (fscanf(fs, "%d %d %s %d %s %s %f %s",
+                  &s.id_shpenzim,
+                  &s.id_user,
+                  s.pershkrim,
+                  &s.kategori.id_kategoria,
+                  s.kategori.emertimi,
+                  s.kategori.pershkrimi,
+                  &s.shuma,
+                  s.data) == 8){
+                    totalExpenses++;
+                  }
+    fclose(fs);
+
+    // ===== averages =====
+
+    float averageExpenses = totalExpensesSystem / totalUsers;
+    float averageIncome = totalIncomeSystem / totalUsers;
+
+    // ===== OUTPUT =====
+
+    printf("\n=========== STATISTIKA TE SISTEMIT ===========\n");
+
+    printf("Numri total i perdoruesve : %d\n", totalUsers);
+    printf("Numri total i shpenzimeve : %d\n", totalExpenses);
+    printf("Totali (lek) i shpenzimeve : %.2f\n", totalExpensesSystem);
+    printf("Totali (lek) i te ardhurave : %.2f\n", totalIncomeSystem);
+    printf("Bilanci total i sistemit : %.2f\n",
+           totalIncomeSystem - totalExpensesSystem);
+
+    printf("\nMesatarja e shpenzimeve : %.2f\n", averageExpenses);
+    printf("Mesatarja e te ardhurave  : %.2f\n", averageIncome);
+
+    printf("\nPerdoruesi me ME SHUME shpenzime:\n");
+    printf("ID       : %d\n", maxUserId);
+    printf("Username : %s\n", maxUser);
+    printf("Shpenz   : %.2f\n", maxExpenses);
+
+    printf("\nPerdoruesi me ME PAK shpenzime:\n");
+    printf("ID       : %d\n", minUserId);
+    printf("Username : %s\n", minUser);
+    printf("Shpenz   : %.2f\n", minExpenses);
+
+    printf("==============================================\n\n");
 }
