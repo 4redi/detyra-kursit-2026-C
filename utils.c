@@ -99,18 +99,16 @@ int gjeneroIdShpenzim()
 
     int last_id = 0;
     struct Shpenzim s;
-    char username[20];
 
-    while (fscanf(f, "%d %d %s %s %d %s %s %f %s",
+    while (fscanf(f, "%d %d %s %d %s %s %f %s",
                   &s.id_shpenzim,
                   &s.id_user,
-                  username,
                   s.pershkrim,
                   &s.kategori.id_kategoria,
                   s.kategori.emertimi,
                   s.kategori.pershkrimi,
                   &s.shuma,
-                  s.data) == 9)
+                  s.data) == 8)
     {
         if (s.id_shpenzim > last_id)
             last_id = s.id_shpenzim;
