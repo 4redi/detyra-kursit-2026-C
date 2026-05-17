@@ -524,7 +524,7 @@ void kerkoShpenzimSipasKategorise(int id_user)
            s.kategori.emertimi,
            s.kategori.pershkrimi,
            &s.shuma,
-           s.data)==9){
+           s.data)==8){
             if(s.id_user==id_user && s.kategori.id_kategoria==id_kategori){
                 printf("ID : %d | %s | %s | %.2f | %s\n",
                        s.id_shpenzim,
@@ -543,7 +543,56 @@ void kerkoShpenzimSipasKategorise(int id_user)
 
 void fshiShpenzim(int id_shpenzim)
 {
-    printf("fshiShpenzim not implemented yet\n\n");
+    FILE *fs=fopen("shpenzime.txt","r");
+    FILE *temp_s=fopen("temp_shpenzime.txt","w");
+
+    if(fs==NULL||temp_s==NULL){
+        printf("Dicka shkoi keq");
+        return;
+    }
+    struct Shpenzim s;
+    int found=0;
+
+    while (fscanf(fs, "%d %d %s %d %s %s %f %s",
+           &s.id_shpenzim,
+           &s.id_user,
+           s.pershkrim,
+           &s.kategori.id_kategoria,
+           s.kategori.emertimi,
+           s.kategori.pershkrimi,
+           &s.shuma,
+           s.data)==8){
+            if(s.id_shpenzim==id_shpenzim){
+                found=1;
+                continue;
+            }
+
+            fprintf(temp_s,"%d %d %s %d %s %s %f %s\n",
+            s.id_shpenzim,
+           s.id_user,
+           s.pershkrim,
+           s.kategori.id_kategoria,
+           s.kategori.emertimi,
+           s.kategori.pershkrimi,
+           s.shuma,
+           s.data);
+           }
+
+    fclose(fs);
+    fclose(temp_s);
+    fcloseall();
+
+    if(!found){
+        remove("temp_shpenzime.txt");
+        printf("Shpenzimi juaj me kete ID su gjet!");
+        return;
+
+    }
+
+    remove("shpenzime.txt");
+    rename("temp_shpenzime.txt","shpenzime.txt");
+    printf("Shpenzimi juaj me ID %d u fshi me sukses!\n\n",id_shpenzim);
+
 }
 
 void renditShpenzimeSipasShumes(int id_user)
