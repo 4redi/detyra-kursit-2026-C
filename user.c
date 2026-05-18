@@ -605,9 +605,64 @@ void renditShpenzimeSipasDates(int id_user)
     printf("renditShpenzimeSipasDates not implemented yet\n\n");
 }
 
+#include <stdio.h>
+#include <string.h>
+
 void kerkoShpenzimSipasId(int id_shpenzim)
 {
-    printf("kerkoShpenzimSipasId not implemented yet\n\n");
+    FILE *fptr = fopen("shpenzime.txt", "r");
+
+    if (fptr == NULL) {
+        printf("Dicka shkoi keq\n");
+        return;
+    }
+
+    struct Shpenzim s;
+    int found=0;
+
+    // Table header
+    printf("---------------------------------------------------------------------------------------------\n");
+    printf("%-5s %-5s %-20s %-10s %-15s %-10s %-10s\n",
+           "ID",
+           "User",
+           "Pershkrim",
+           "KatID",
+           "Kategoria",
+           "Shuma",
+           "Data");
+    printf("---------------------------------------------------------------------------------------------\n");
+
+    while (fscanf(fptr, "%d %d %s %d %s %s %f %s",
+                  &s.id_shpenzim,
+                  &s.id_user,
+                  s.pershkrim,
+                  &s.kategori.id_kategoria,
+                  s.kategori.emertimi,
+                  s.kategori.pershkrimi,
+                  &s.shuma,
+                  s.data) == 8)
+    {
+        if (s.id_shpenzim == id_shpenzim) {
+            found=1;
+            printf("%-5d %-5d %-20s %-10d %-15s %-10.2f %-10s\n",
+                   s.id_shpenzim,
+                   s.id_user,
+                   s.pershkrim,
+                   s.kategori.id_kategoria,
+                   s.kategori.emertimi,
+                   s.shuma,
+                   s.data);
+        }
+    }
+
+    printf("---------------------------------------------------------------------------------------------\n\n");
+
+    if (!found) {
+        printf("Shpenzimi me ID %d nuk u gjet.\n\n", id_shpenzim);
+    }
+
+    fclose(fptr);
+    fcloseall();
 }
 
 void kerkoShpenzimSipasDate(int id_user, char data[])
