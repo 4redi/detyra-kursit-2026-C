@@ -12,4 +12,5 @@ float totalTeArdhura(int id_user);
 float totalShpenzime(int id_user);
 int gjeneroIdKategori();
 int gjeneroIdArdhure();
+int konvertoDaten(char data[]);
 #endif
