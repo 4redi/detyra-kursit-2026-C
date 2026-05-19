@@ -99,7 +99,7 @@ void userMenu(int id_user, char username[])
         case 13:
         {
             char data[20];
-            printf("Vendos daten (p.sh. dd-mm-yyyy): ");
+            printf("Vendos daten (p.sh. dd-mm-vvvv): ");
             scanf("%s", data);
             kerkoShpenzimSipasDate(id_user, data);
             break;
@@ -597,17 +597,160 @@ void fshiShpenzim(int id_shpenzim)
 
 void renditShpenzimeSipasShumes(int id_user)
 {
-    printf("renditShpenzimeSipasShumes not implemented yet\n\n");
+    // logjika: ruaj ne array, vendos nje bubble sort
+    // ! Kujdes: User-i duhet te shohi vetem shpenzimet e veta dhe jo te te tjereve
+
+    FILE *fptr=fopen("shpenzime.txt","r");
+    if(fptr==NULL){
+        printf("Dicka shkoi keq");
+        return;
+    }
+
+    struct Shpenzim s[100];
+    struct Shpenzim temp; //ndihmon ne shkembim
+
+    int count=0; // sa shpenzime ka user-i aktual
+
+     while (fscanf(fptr, "%d %d %s %d %s %s %f %s",
+                  &s[count].id_shpenzim,
+                  &s[count].id_user,
+                  s[count].pershkrim,
+                  &s[count].kategori.id_kategoria,
+                  s[count].kategori.emertimi,
+                  s[count].kategori.pershkrimi,
+                  &s[count].shuma,
+                  s[count].data) == 8){
+                    if(s[count].id_user==id_user){
+                        count++;
+                    }
+                  }
+
+        fclose(fptr);
+        fcloseall();
+
+        if(count==0){
+            printf("Nuk ka shpenzime per kete user \n\n");
+            return;
+        }
+
+    for(int i=0;i<count-1;i++){
+        for(int j=i+1;j<count;j++){
+            if(s[i].shuma<s[j].shuma){
+                temp=s[j];
+                s[j]=s[i];
+                s[i]=temp;
+            }
+        }
+    }
+    printf("\n===================== SHPENZIMET E RENDITURA SIPAS SHUMES =====================\n\n");
+
+printf("%-5s %-5s %-20s %-10s %-15s %-15s %-10s %-12s\n",
+       "ID",
+       "User",
+       "Pershkrim",
+       "ID_Kat",
+       "Kategoria",
+       "Kat_Pershkrim",
+       "Shuma",
+       "Data");
+
+printf("-----------------------------------------------------------------------------------------------\n");
+
+for (int i = 0; i < count; i++)
+{
+    printf("%-5d %-5d %-20s %-10d %-15s %-15s %-10.2f %-12s\n",
+           s[i].id_shpenzim,
+           s[i].id_user,
+           s[i].pershkrim,
+           s[i].kategori.id_kategoria,
+           s[i].kategori.emertimi,
+           s[i].kategori.pershkrimi,
+           s[i].shuma,
+           s[i].data);
+}
+
+printf("-----------------------------------------------------------------------------------------------\n\n");
 }
 
 void renditShpenzimeSipasDates(int id_user)
 {
-    printf("renditShpenzimeSipasDates not implemented yet\n\n");
+    /* Logjika: data eshte ne string, veshtire te krahasosh stringat (jo alfabetike)
+    meqe formati yne eshte dd-mm-vvvv ath behet e veshtire dhe duhet konvertuar ne nje standart te sigurt
+    (numer integer) ne trajten muaj*100+dite,
+    nuk e marr parasysh vitin meqe esht vetem per 2026.
+    Integer do duket keshtu :MMDD (ku muaj max esht 12 dhe dita max 31)
+    */
+   FILE *fptr=fopen("shpenzime.txt","r");
+   if(fptr==NULL){
+    printf("Dicka shkoi keq");
+    return;
+   }
+
+   struct Shpenzim s[200]; //dyshoj per me shume shpenzime
+   struct Shpenzim temp;
+   int count=0;
+   while (fscanf(fptr, "%d %d %s %d %s %s %f %s",
+                  &s[count].id_shpenzim,
+                  &s[count].id_user,
+                  s[count].pershkrim,
+                  &s[count].kategori.id_kategoria,
+                  s[count].kategori.emertimi,
+                  s[count].kategori.pershkrimi,
+                  &s[count].shuma,
+                  s[count].data) == 8){
+                    if(s[count].id_user==id_user){
+                        count++;
+                    }
+                  }
+    fclose(fptr);
+    fcloseall();
+
+    if(count==0){
+        printf("Dicka shkoi keq\n\n");
+        return;
+    }
+
+    //sortimi dhe venie ne pune e funx. konvertues
+    for(int i=0;i<count-1;i++){
+        for(int j=i+1;j<count;j++){
+            if(konvertoDaten(s[i].data)<konvertoDaten(s[j].data)){
+                temp=s[i];
+                s[i]=s[j];
+                s[j]=temp;
+            }
+        }
+    }
+
+     printf("\n================ SHPENZIMET SIPAS DATES ================\n\n");
+     printf("%-5s %-5s %-20s %-10s %-15s %-15s %-10s %-12s\n",
+       "ID",
+       "User",
+       "Pershkrim",
+       "ID_Kat",
+       "Kategoria",
+       "Kat_Pershkrim",
+       "Shuma",
+       "Data");
+
+printf("-----------------------------------------------------------------------------------------------\n");
+
+for (int i = 0; i < count; i++)
+{
+    printf("%-5d %-5d %-20s %-10d %-15s %-15s %-10.2f %-12s\n",
+           s[i].id_shpenzim,
+           s[i].id_user,
+           s[i].pershkrim,
+           s[i].kategori.id_kategoria,
+           s[i].kategori.emertimi,
+           s[i].kategori.pershkrimi,
+           s[i].shuma,
+           s[i].data);
 }
 
-#include <stdio.h>
-#include <string.h>
+printf("-----------------------------------------------------------------------------------------------\n\n");
 
+
+}
 void kerkoShpenzimSipasId(int id_shpenzim)
 {
     FILE *fptr = fopen("shpenzime.txt", "r");
