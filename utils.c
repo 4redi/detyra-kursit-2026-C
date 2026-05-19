@@ -268,3 +268,9 @@ int gjeneroIdKategori(){
     return last_id+1;
 
 }
+
+int konvertoDaten(char data[]){
+    int muaj, dita, viti;
+    sscanf(data, "%d-%d-%d",&dita,&muaj,&viti);
+    return muaj*100+dita;
+}
