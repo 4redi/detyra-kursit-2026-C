@@ -837,12 +837,12 @@ void statistika()
     printf("\nPerdoruesi me ME SHUME shpenzime:\n");
     printf("ID       : %d\n", maxUserId);
     printf("Username : %s\n", maxUser);
-    printf("Shpenz   : %.2f\n", maxExpenses);
+    printf("Shpenzime   : %.2f\n", maxExpenses);
 
     printf("\nPerdoruesi me ME PAK shpenzime:\n");
     printf("ID       : %d\n", minUserId);
     printf("Username : %s\n", minUser);
-    printf("Shpenz   : %.2f\n", minExpenses);
+    printf("Shpenzime   : %.2f\n", minExpenses);
 
     printf("==============================================\n\n");
 }
