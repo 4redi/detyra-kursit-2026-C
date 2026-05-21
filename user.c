@@ -75,7 +75,7 @@ void userMenu(int id_user, char username[])
             int id_shpenzim;
             printf("Vendos ID e shpenzimit per fshirje: ");
             scanf("%d", &id_shpenzim);
-            fshiShpenzim(id_shpenzim);
+            fshiShpenzim(id_shpenzim,id_user);
             break;
         }
 
@@ -92,7 +92,7 @@ void userMenu(int id_user, char username[])
             int id_shpenzim;
             printf("Vendos ID e shpenzimit: ");
             scanf("%d", &id_shpenzim);
-            kerkoShpenzimSipasId(id_shpenzim);
+            kerkoShpenzimSipasId(id_shpenzim,id_user);
             break;
         }
 
@@ -108,10 +108,24 @@ void userMenu(int id_user, char username[])
         case 14:
         {
             char data1[20], data2[20];
-            printf("Vendos daten e pare: ");
-            scanf("%s", data1);
-            printf("Vendos daten e dyte: ");
-            scanf("%s", data2);
+            int d1, m1, v1;
+            int d2, m2, v2;
+            printf("Vendos daten e pare:\n");
+            lexoDaten(&d1, &m1, &v1);
+            printf("Vendos daten e dyte:\n");
+            lexoDaten(&d2, &m2, &v2);
+            sprintf(data1, "%02d-%02d-%04d", d1, m1, v1);
+            /*
+            TODO: Sqarim! sprintf(stringaKuDuMeERujt, "formati", variablat)
+            TODO: Nje shembull i thjeshte
+            int nr1,nr2;
+            char op;
+            char veprimi[201] // e them se se di sa mund t jet nr max e marr 100 
+            merri me scan
+            dhe sprintf(veprimi, "%d%c%d",nr1,op,nr2);
+            
+            */
+            sprintf(data2, "%02d-%02d-%04d", d2, m2, v2);
             kerkoShpenzimeIntervalDate(id_user, data1, data2);
             break;
         }
@@ -541,7 +555,7 @@ void kerkoShpenzimSipasKategorise(int id_user)
            fclose(fptr);
 }
 
-void fshiShpenzim(int id_shpenzim)
+void fshiShpenzim(int id_shpenzim,int id_user)
 {
     FILE *fs=fopen("shpenzime.txt","r");
     FILE *temp_s=fopen("temp_shpenzime.txt","w");
@@ -562,7 +576,7 @@ void fshiShpenzim(int id_shpenzim)
            s.kategori.pershkrimi,
            &s.shuma,
            s.data)==8){
-            if(s.id_shpenzim==id_shpenzim){
+            if(s.id_shpenzim==id_shpenzim && s.id_user==id_user){
                 found=1;
                 continue;
             }
@@ -679,6 +693,10 @@ void renditShpenzimeSipasDates(int id_user)
     (numer integer) ne trajten muaj*100+dite,
     nuk e marr parasysh vitin meqe esht vetem per 2026.
     Integer do duket keshtu :MMDD (ku muaj max esht 12 dhe dita max 31)
+    me strcmp shkakton probleme ne disa raste
+    psh strcmp("01-10-2026","12-07-2026") del error 
+    nqs do ishte ("10-01-2026") dhe ("07-12-2026") do dilte sakte
+    por, ne standartin shqip ska kuptim te ruhet data keshtu
     */
    FILE *fptr=fopen("shpenzime.txt","r");
    if(fptr==NULL){
@@ -751,7 +769,7 @@ printf("------------------------------------------------------------------------
 
 
 }
-void kerkoShpenzimSipasId(int id_shpenzim)
+void kerkoShpenzimSipasId(int id_shpenzim, int id_user)
 {
     FILE *fptr = fopen("shpenzime.txt", "r");
 
@@ -785,7 +803,7 @@ void kerkoShpenzimSipasId(int id_shpenzim)
                   &s.shuma,
                   s.data) == 8)
     {
-        if (s.id_shpenzim == id_shpenzim) {
+        if (s.id_shpenzim == id_shpenzim && s.id_user==id_user) {
             found=1;
             printf("%-5d %-5d %-20s %-10d %-15s %-10.2f %-10s\n",
                    s.id_shpenzim,
@@ -810,10 +828,104 @@ void kerkoShpenzimSipasId(int id_shpenzim)
 
 void kerkoShpenzimSipasDate(int id_user, char data[])
 {
-    printf("kerkoShpenzimSipasDate not implemented yet\n\n");
+    FILE *fptr=fopen("shpenzime.txt","r");
+    if(fptr==NULL){
+        printf("Dicka shkoi keq");
+        return;
+    }
+    struct Shpenzim s;
+    int found=0;
+     printf("\n================ SHPENZIMET PER DATEN %s ================\n\n", data);
+     printf("%-5s %-8s %-20s %-10s %-20s %-12s %-15s\n",
+           "ID",
+           "USER",
+           "PERSHKRIM",
+           "KAT_ID",
+           "KATEGORIA",
+           "SHUMA",
+           "DATA");
+    printf("---------------------------------------------------------------------------------------------\n");
+    while (fscanf(fptr, "%d %d %s %d %s %s %f %s",
+                  &s.id_shpenzim,
+                  &s.id_user,
+                  s.pershkrim,
+                  &s.kategori.id_kategoria,
+                  s.kategori.emertimi,
+                  s.kategori.pershkrimi,
+                  &s.shuma,
+                  s.data) == 8)
+    {
+        if(s.id_user==id_user&&strcmp(data,s.data)==0){
+            printf("%-5d %-8d %-20s %-10d %-20s %-12.2f %-15s\n",
+                   s.id_shpenzim,
+                   s.id_user,
+                   s.pershkrim,
+                   s.kategori.id_kategoria,
+                   s.kategori.emertimi,
+                   s.shuma,
+                   s.data);
+            found=1;
+        }
+    }
+        printf("---------------------------------------------------------------------------------------------\n");
+
+
+    if(!found){
+        printf("Nuk u gjet ndonje shpenzim me kete %s date",data);
+    }
+    printf("\n\n");
+    fclose(fptr);
+    fcloseall();
+
 }
 
 void kerkoShpenzimeIntervalDate(int id_user, char data1[], char data2[])
 {
-    printf("kerkoShpenzimeIntervalDate not implemented yet\n\n");
+    // hedh hipotezen qe data1<data2 psh : 01-10-2026<01-12-2026 (Nqs e anasjellta i bej switch)
+    FILE *fptr=fopen("shpenzime.txt","r");
+    int d1=konvertoDaten(data1);
+    int d2=konvertoDaten(data2);
+    if(d1>d2){
+        int temp=d1;
+        d1=d2;
+        d2=temp;
+    }
+
+    struct Shpenzim s;
+    int found=0;
+    printf("\n================ SHPENZIMET MIDIS DATAVE %s dhe %s ================\n\n", data1,data2);
+    while (fscanf(fptr, "%d %d %s %d %s %s %f %s",
+                  &s.id_shpenzim,
+                  &s.id_user,
+                  s.pershkrim,
+                  &s.kategori.id_kategoria,
+                  s.kategori.emertimi,
+                  s.kategori.pershkrimi,
+                  &s.shuma,
+                  s.data) == 8)
+    {
+        int currentData=konvertoDaten(s.data);
+
+        if(s.id_user==id_user && currentData>=d1 && currentData<=d2){
+             printf("%-5d %-8d %-20s %-10d %-20s %-12.2f %-15s\n",
+                   s.id_shpenzim,
+                   s.id_user,
+                   s.pershkrim,
+                   s.kategori.id_kategoria,
+                   s.kategori.emertimi,
+                   s.shuma,
+                   s.data);
+            found=1;
+        }
+    }
+    printf("---------------------------------------------------------------------------------------------\n");
+    if(!found){
+        printf("Nuk u gjet ndonje shpenzim me interval ]%s;%s[",data1,data2);
+    }
+    printf("\n\n");
+    fclose(fptr);
+    fcloseall();
+
+
+    
 }

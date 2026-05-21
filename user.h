@@ -15,10 +15,10 @@ void raportMujor(int id_user);
 void raportVjetor(int id_user);
 void kontrolloBuxhetin(int id_user);
 void kerkoShpenzimSipasKategorise(int id_user);
-void fshiShpenzim(int id_shpenzim);
+void fshiShpenzim(int id_shpenzim,int id_user);
 void renditShpenzimeSipasShumes(int id_user);
 void renditShpenzimeSipasDates(int id_user);
-void kerkoShpenzimSipasId(int id_shpenzim);
+void kerkoShpenzimSipasId(int id_shpenzim,int id_user);
 void kerkoShpenzimSipasDate(int id_user, char data[]);
 void kerkoShpenzimeIntervalDate(int id_user, char data1[], char data2[]);
 
