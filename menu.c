@@ -48,7 +48,7 @@ void menuja()
             break;
 
         case 3:
-            return;
+             exit(0);
 
         default:
             printf("Invalid!\n");
