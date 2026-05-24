@@ -448,7 +448,7 @@ void kerkoSipasUsername(char username[])
 }
 void rradhitSipasUsername()
 {
-    // mendoje si nje array dhe do i besh order me bubble sort
+    // mendoje si nje array dhe do i besh order
 
     FILE *fptr = fopen("user.txt", "r");
     if (fptr == NULL)

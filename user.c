@@ -359,9 +359,8 @@ void shfaqTeArdhura(int id_user)
 
 void raportMujor(int id_user)
 {
-    int muaji, viti;
+    int muaji, viti=2026;
     printf("Muaji (1-12): "); scanf("%d", &muaji);
-    printf("Viti: "); scanf("%d", &viti);
 
     FILE *fs = fopen("shpenzime.txt", "r");
     FILE *fa = fopen("teArdhura.txt", "r");
@@ -414,9 +413,7 @@ void raportMujor(int id_user)
 
 void raportVjetor(int id_user)
 {
-    int viti;
-    printf("Viti:");
-    scanf("%d",&viti);
+    int viti=2026;
     FILE *fs = fopen("shpenzime.txt", "r");
     FILE *fa = fopen("teArdhura.txt", "r");
     struct Shpenzim s;
@@ -611,7 +608,7 @@ void fshiShpenzim(int id_shpenzim,int id_user)
 
 void renditShpenzimeSipasShumes(int id_user)
 {
-    // logjika: ruaj ne array, vendos nje bubble sort
+    // logjika: ruaj ne array, vendos nje sort
     // ! Kujdes: User-i duhet te shohi vetem shpenzimet e veta dhe jo te te tjereve
 
     FILE *fptr=fopen("shpenzime.txt","r");
