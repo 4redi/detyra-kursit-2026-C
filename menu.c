@@ -1,7 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
-#include <ctype.h>
 #include "menu.h"
 #include "auth.h"
 #include "user.h"
@@ -51,7 +49,7 @@ void menuja()
              exit(0);
 
         default:
-            printf("Invalid!\n");
+            printf("Zgjedhje e gabuar, zgjidhni prape!\n");
         }
     } while (choice != 3);
 }
