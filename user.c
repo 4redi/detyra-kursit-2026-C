@@ -99,8 +99,9 @@ void userMenu(int id_user, char username[])
         case 13:
         {
             char data[20];
-            printf("Vendos daten (p.sh. dd-mm-vvvv): ");
-            scanf("%s", data);
+            int d, m, y;
+            lexoDaten(&d, &m, &y);
+            sprintf(data, "%02d-%02d-%04d", d, m, y);
             kerkoShpenzimSipasDate(id_user, data);
             break;
         }
