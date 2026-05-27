@@ -274,3 +274,21 @@ int konvertoDaten(char data[]){
     sscanf(data, "%d-%d-%d",&dita,&muaj,&viti);
     return muaj*100+dita;
 }
+
+void renditMeDate(struct Shpenzim lista[], int count)
+{
+    struct Shpenzim temp;
+
+    for(int i = 0; i < count - 1; i++)
+    {
+        for(int j = i + 1; j < count; j++)
+        {
+            if(konvertoDaten(lista[i].data) > konvertoDaten(lista[j].data))
+            {
+                temp = lista[i];
+                lista[i] = lista[j];
+                lista[j] = temp;
+            }
+        }
+    }
+}

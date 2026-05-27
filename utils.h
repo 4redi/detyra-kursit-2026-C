@@ -13,4 +13,5 @@ float totalShpenzime(int id_user);
 int gjeneroIdKategori();
 int gjeneroIdArdhure();
 int konvertoDaten(char data[]);
+void renditMeDate(struct Shpenzim lista[], int count);
 #endif
